@@ -4,31 +4,31 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::installer)
 {
     ui->setupUi(this);
-    manager = new QNetworkAccessManager();
-    QObject::connect(manager, &QNetworkAccessManager::finished,
-                     this, [=](QNetworkReply *reply) {
-                if (reply->error()) {
-                    qDebug() << reply->errorString();
-                    return;
-                }
-
-                QString answer = reply->readAll();
-
-                qDebug() << answer;
-            }
-    );
-    request.setUrl(QUrl("http://numbersapi.com/314159265358979"));
-    manager->get(request);
-
-    ui->centralwidget = new ChoosePath(this);
-    ui->centralwidget->show();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+void MainWindow::on_back_button_clicked()
+{
+
+}
+
+
+void MainWindow::on_next_button_clicked()
+{
+
+}
+
+
+void MainWindow::on_cancel_button_clicked()
+{
+
 }
 

@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace Ui {
-class ChoosePath;
+class choose_path;
 }
 
 class ChoosePath : public QWidget
@@ -15,8 +15,11 @@ public:
     explicit ChoosePath(QWidget *parent = nullptr);
     ~ChoosePath();
 
+private slots:
+    void on_choose_button_clicked();
+
 private:
-    Ui::ChoosePath *ui;
+    Ui::choose_path *ui;
 };
 
 #endif // CHOOSE_PATH_H

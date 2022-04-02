@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>greeting</class>
- <widget class="QWidget" name="greeting">
+ <class>finish</class>
+ <widget class="QWidget" name="finish">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,13 +13,13 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QTextEdit" name="info_text">
+  <widget class="QTextEdit" name="info">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>20</y>
-     <width>251</width>
-     <height>241</height>
+     <x>20</x>
+     <y>0</y>
+     <width>321</width>
+     <height>221</height>
     </rect>
    </property>
   </widget>

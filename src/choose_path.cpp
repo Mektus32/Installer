@@ -3,7 +3,7 @@
 
 ChoosePath::ChoosePath(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ChoosePath)
+    ui(new Ui::choose_path)
 {
     ui->setupUi(this);
 }
@@ -12,3 +12,9 @@ ChoosePath::~ChoosePath()
 {
     delete ui;
 }
+
+void ChoosePath::on_choose_button_clicked()
+{
+
+}
+

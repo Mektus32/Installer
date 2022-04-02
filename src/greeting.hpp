@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace Ui {
-class Greeting;
+class greeting;
 }
 
 class Greeting : public QWidget
@@ -16,7 +16,7 @@ public:
     ~Greeting();
 
 private:
-    Ui::Greeting *ui;
+    Ui::greeting *ui;
 };
 
 #endif // GREETING_HPP

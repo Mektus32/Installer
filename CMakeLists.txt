@@ -25,7 +25,9 @@ include_directories(${SRC_DIR})
 file(GLOB_RECURSE SOURCES
         "${UI_DIR}/*.ui"
         "${SRC_DIR}/*.cpp"
-        "${SRC_DIR}/*.hpp")
+        "${SRC_DIR}/*.hpp"
+        "${SRC_DIR}/*/*.cpp"
+        "${SRC_DIR}/*/*.hpp")
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_AUTOUIC_SEARCH_PATHS} ${UI_DIR})
 
