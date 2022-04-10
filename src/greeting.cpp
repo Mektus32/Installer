@@ -1,14 +1,33 @@
 #include "greeting.hpp"
-#include <ui_greeting.h>
+#include "ui_greeting.h"
+
+#include <managers/registry_manager.hpp>
+
+#include "choose_functional.hpp"
+#include "choose_path.hpp"
+
 
 Greeting::Greeting(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::greeting)
+        AbstractScreen(parent, this),
+        ui_(new Ui::greeting)
 {
-    ui->setupUi(this);
+    ui_->setupUi(this);
+    ui_->info_text->setText("something");
 }
 
 Greeting::~Greeting()
 {
-    delete ui;
+    delete ui_;
+}
+
+void Greeting::UpdateButtonsState(Buttons &buttons) {
+    buttons.back->setDisabled(true);
+}
+
+AbstractScreen* Greeting::MakeActionAndChangeState() {
+    if (!RegistryManager::GetAvailablePrograms().empty()) {
+        return new ChooseFunctional(parent_, this);
+    } else {
+        return new ChoosePath(parent_, this, Functional::kInstall);
+    }
 }

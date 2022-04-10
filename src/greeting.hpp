@@ -1,22 +1,21 @@
-#ifndef GREETING_HPP
-#define GREETING_HPP
+#pragma once
 
-#include <QWidget>
+#include "abstract_screen.hpp"
 
 namespace Ui {
 class greeting;
 }
 
-class Greeting : public QWidget
+class Greeting : public AbstractScreen
 {
     Q_OBJECT
 
 public:
-    explicit Greeting(QWidget *parent = nullptr);
+    explicit Greeting(QWidget *parent);
     ~Greeting();
+    void UpdateButtonsState(Buttons& buttons) override;
+    AbstractScreen* MakeActionAndChangeState() override;
 
 private:
-    Ui::greeting *ui;
+    Ui::greeting *ui_;
 };
-
-#endif // GREETING_HPP

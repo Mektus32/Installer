@@ -1,19 +1,20 @@
-#ifndef PROGRAM_CHOOSE_HPP
-#define PROGRAM_CHOOSE_HPP
+#pragma once
 
-#include <QWidget>
+#include "abstract_screen.hpp"
 
 namespace Ui {
 class program_choose;
 }
 
-class ProgramChoose : public QWidget
+class ProgramChoose : public AbstractScreen
 {
     Q_OBJECT
 
 public:
-    explicit ProgramChoose(QWidget *parent = nullptr);
+    explicit ProgramChoose(QWidget *parent, AbstractScreen* previous, Functional functional, const std::string& file_path = "");
     ~ProgramChoose();
+    void UpdateButtonsState(Buttons& buttons) override;
+    AbstractScreen* MakeActionAndChangeState() override;
 
 private slots:
     void on_program_name_currentIndexChanged(int index);
@@ -23,7 +24,7 @@ private slots:
     void on_new_program_version_currentIndexChanged(int index);
 
 private:
-    Ui::program_choose *ui;
+    Ui::program_choose *ui_;
+    const Functional functional_;
+    const std::string& file_path_;
 };
-
-#endif // PROGRAM_CHOOSE_HPP

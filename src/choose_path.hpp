@@ -1,25 +1,27 @@
-#ifndef CHOOSE_PATH_H
-#define CHOOSE_PATH_H
+#pragma once
 
-#include <QWidget>
+#include "abstract_screen.hpp"
 
 namespace Ui {
 class choose_path;
 }
 
-class ChoosePath : public QWidget
+class ChoosePath : public AbstractScreen
 {
     Q_OBJECT
 
 public:
-    explicit ChoosePath(QWidget *parent = nullptr);
+    explicit ChoosePath(QWidget *parent, AbstractScreen* previous,
+                        Functional functional);
     ~ChoosePath();
+    void UpdateButtonsState(Buttons& buttons) override;
+    AbstractScreen* MakeActionAndChangeState() override;
 
 private slots:
     void on_choose_button_clicked();
 
 private:
-    Ui::choose_path *ui;
+    Ui::choose_path *ui_;
+    Functional functional_;
+    std::string file_path_;
 };
-
-#endif // CHOOSE_PATH_H

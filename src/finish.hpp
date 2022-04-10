@@ -1,22 +1,21 @@
-#ifndef FINISH_HPP
-#define FINISH_HPP
+#pragma once
 
-#include <QWidget>
+#include "abstract_screen.hpp"
 
 namespace Ui {
 class finish;
 }
 
-class Finish : public QWidget
+class Finish : public AbstractScreen
 {
     Q_OBJECT
 
 public:
-    explicit Finish(QWidget *parent = nullptr);
+    explicit Finish(QWidget *parent, AbstractScreen* previous);
     ~Finish();
+    void UpdateButtonsState(Buttons& buttons) override;
+    AbstractScreen* MakeActionAndChangeState() override;
 
 private:
     Ui::finish *ui;
 };
-
-#endif // FINISH_HPP

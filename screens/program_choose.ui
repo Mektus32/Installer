@@ -33,7 +33,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Выберите программу для установки</string>
+    <string>Выберите программу</string>
    </property>
   </widget>
   <widget class="QLabel" name="version_caption">

@@ -1,10 +1,11 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 #include <managers/network_manager.hpp>
 #include <managers/registry_manager.hpp>
 #include <types/types.hpp>
+
+#include "abstract_screen.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class installer; }
@@ -31,6 +32,5 @@ private:
     RegistryManager registry_manager_;
     Functional choosen_functional_;
     Program current_program_;
-    QWidget* current_widget_;
+    AbstractScreen* current_screen_;
 };
-#endif // MAINWINDOW_H

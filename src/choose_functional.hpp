@@ -1,22 +1,21 @@
-#ifndef CHOOSE_FUNCTIONAL_HPP
-#define CHOOSE_FUNCTIONAL_HPP
+#pragma once
 
-#include <QWidget>
+#include "abstract_screen.hpp"
 
 namespace Ui {
 class choose_functional;
 }
 
-class ChooseFunctional : public QWidget
+class ChooseFunctional : public AbstractScreen
 {
     Q_OBJECT
 
 public:
-    explicit ChooseFunctional(QWidget *parent = nullptr);
+    explicit ChooseFunctional(QWidget *parent, AbstractScreen* previous);
     ~ChooseFunctional();
+    void UpdateButtonsState(Buttons& buttons) override;
+    AbstractScreen* MakeActionAndChangeState() override;
 
 private:
     Ui::choose_functional *ui;
 };
-
-#endif // CHOOSE_FUNCTIONAL_HPP
