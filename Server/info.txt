@@ -1,3 +1,0 @@
-program_name=12.01
-program_name=12.02
-name=12.03

@@ -1,2 +1,0 @@
-ip=127.0.0.1
-programs_path=/Users/mektus/Desktop/Installer/Server/programs

@@ -30,6 +30,7 @@ ui_*.h
 Makefile*
 *build-*
 .idea*
+.DS_Store
 *.qm
 *.prl
 
