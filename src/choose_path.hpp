@@ -23,5 +23,5 @@ private slots:
 private:
     Ui::choose_path *ui_;
     Functional functional_;
-    std::string file_path_;
+    QString dir_;
 };

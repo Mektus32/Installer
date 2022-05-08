@@ -1,7 +1,7 @@
 #include "choose_path.hpp"
 #include "ui_choose_path.h"
-
 #include "program_choose.hpp"
+#include <utils/utils.hpp>
 
 #include <QFileDialog>
 
@@ -20,8 +20,8 @@ ChoosePath::~ChoosePath()
 
 void ChoosePath::on_choose_button_clicked()
 {
-    file_path_ = QFileDialog::getExistingDirectory().toStdString();
-    ui_->file_path->setText(file_path_.c_str());
+    dir_ = QFileDialog::getExistingDirectory();
+    ui_->file_path->setText(dir_);
 }
 
 void ChoosePath::UpdateButtonsState(Buttons &buttons) {
@@ -29,10 +29,12 @@ void ChoosePath::UpdateButtonsState(Buttons &buttons) {
 }
 
 AbstractScreen *ChoosePath::MakeActionAndChangeState() {
-    if (!file_path_.empty()) {
-        return new ProgramChoose(parent_, this, Functional::kInstall, file_path_);
+    QDir dir{dir_};
+    if (dir.exists()) {
+        return new ProgramChoose(parent_, this, Functional::kInstall, dir.absolutePath());
+    } else {
+        MakeError("This directory does not exist. Try another.");
     }
-    // show "choose file path"
     return this;
 }
 

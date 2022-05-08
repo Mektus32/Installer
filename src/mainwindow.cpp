@@ -1,6 +1,7 @@
 #include "mainwindow.hpp"
 #include "ui_main.h"
 #include "greeting.hpp"
+#include <managers/network_manager.hpp>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->centralwidget = current_screen_;
     Buttons buttons{ui->back_button, ui->next_button, ui->cancel_button};
     current_screen_->UpdateButtonsState(buttons);
+    NetworkManager::GetAvailablePrograms();
 }
 
 MainWindow::~MainWindow()

@@ -2,10 +2,10 @@
 
 #include <QSettings>
 
-std::unordered_set<Program, Hasher, Hasher> RegistryManager::available_programs_ = {};
+std::unordered_map<QString, Program> RegistryManager::available_programs_ = {};
 
-const std::unordered_set<Program, Hasher, Hasher> &RegistryManager::GetAvailablePrograms() {
-    available_programs_.emplace(Program{"some_name", "some_version", "some_path"});
+const std::unordered_map<QString, Program> &RegistryManager::GetAvailablePrograms() {
+//    available_programs_.emplace(Program{"some_name", "some_version", "some_path"});
     return available_programs_;
 }
 

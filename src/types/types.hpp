@@ -3,14 +3,17 @@
 #include <optional>
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
 
 #include <QPushButton>
 
 struct Program {
-    std::string name;
-    std::unordered_set<std::string> versions;
-    std::optional<std::string> path;
+    QString name;
+    std::vector<QString> versions;
+    std::optional<std::unordered_map<QString, QString>> installed_versions_paths;
 };
+
+bool operator==(const Program& lhs, const Program& rhs);
 
 struct Hasher {
     std::size_t operator()(const Program& value) const;

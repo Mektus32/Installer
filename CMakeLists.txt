@@ -32,7 +32,7 @@ file(GLOB_RECURSE SOURCES
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_AUTOUIC_SEARCH_PATHS} ${UI_DIR})
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    add_executable(Installer ${SOURCES} src/abstract_screen.hpp src/types/types.cpp)
+    add_executable(Installer ${SOURCES} src/abstract_screen.hpp src/types/types.cpp src/utils/utils.hpp src/utils/utils.cpp)
 endif()
 
 target_include_directories(Installer PRIVATE ${UI_DIR})
