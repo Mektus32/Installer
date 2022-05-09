@@ -17,13 +17,17 @@ void RegistryManager::AddProgram(QString &&program_name,
 
 std::optional<QString> RegistryManager::UpdateProgram(const QString &program_name,
                                     const QString &program_version,
-                                    QString &&new_program_version) {
+                                    const QString &new_program_version) {
 
 }
 
 std::optional<QString> RegistryManager::DeleteProgram(const QString &program_name,
                                     const QString &program_version) {
 
+}
+
+std::optional<QString> RegistryManager::GetProgramPath(const QString& program_name,
+                                      const QString& program_version) {
 }
 
 

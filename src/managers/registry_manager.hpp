@@ -12,9 +12,11 @@ public:
                     QString&& program_path);
     static std::optional<QString> UpdateProgram(const QString& program_name,
                        const QString& program_version,
-                       QString&& new_program_version);
+                       const QString& new_program_version);
     static std::optional<QString> DeleteProgram(const QString& program_name,
                        const QString& program_version);
+    static std::optional<QString> GetProgramPath(const QString& program_name,
+                                                 const QString& program_version);
 private:
     static std::unordered_map<QString, Program> available_programs_;
 };

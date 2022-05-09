@@ -37,9 +37,6 @@ ProgramChoose::ProgramChoose(QWidget *parent, AbstractScreen *previous,
                             }
                         }
                     }
-                } else {
-                    programs[available_program.first];
-                    new_program_versions_[available_program.first] = available_program.second.versions;
                 }
             }
         } else {
@@ -117,37 +114,37 @@ AbstractScreen *ProgramChoose::MakeActionAndChangeState() {
             const auto &[zip_file, error] = NetworkManager::GetArchiveFile(program_name, program_version);
             if (error) {
                 ShowMessage(*error);
-                exit(3);
+                return this;
             }
             if (auto dir = UnzipFileInDirGetDir(*zip_file, dir_); dir) {
-                CreateLinkToExec(*dir);
+                CreateLinkToExec(*dir, program_name + '_' + program_version);
                 RegistryManager::AddProgram(std::move(program_name), std::move(program_version), std::move(*dir));
             } else {
                 ShowMessage("Can`t install program. Try to start program from Administrator.");
             }
-        }
-            break;
+        } break;
         case Functional::kDelete:
             program_name = ui_->program_name->currentText();
             program_version = ui_->program_version->currentText();
             if (const auto &path = RegistryManager::DeleteProgram(ui_->program_name->currentText(),
-                                                                  ui_->program_version->currentText()); path && fs::remove(path->toStdString())) {
+                                                                  ui_->program_version->currentText()); path
+                                                                  && fs::remove(path->toStdString())) {
+                DeleteLinkToExec(program_name, program_version);
                 ShowMessage("Program successfully deleted.");
             } else {
                 ShowMessage("Can`t delete program. Try to start program from Administrator.");
             }
             break;
-        case Functional::kUpdate:
+        case Functional::kUpdate: {
             program_name = ui_->program_name->currentText();
             program_version = ui_->new_program_version->currentText();
-            if (const auto &path = RegistryManager::UpdateProgram(ui_->program_name->currentText(),
-                                                                  ui_->program_version->currentText(),
-                                                                  ui_->new_program_version->currentText()); path) {
-                CreateLinkToExec(*path);
-            } else {
-                ShowMessage("Can`t update program. Try to start program from Administrator.");
+            const auto& error = UpdateProgram(ui_->program_name->currentText(), ui_->program_version->currentText(),
+                                              ui_->new_program_version->currentText());
+            if (error) {
+                ShowMessage(*error);
+                return this;
             }
-            break;
+        } break;
         default:
             ShowMessage("Unexpected state. Installer will be closed!");
             exit(2);
