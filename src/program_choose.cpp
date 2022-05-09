@@ -2,6 +2,9 @@
 #include "ui_program_choose.h"
 #include "finish.hpp"
 
+#include <filesystem>
+#include <regex>
+
 #include <managers/registry_manager.hpp>
 #include <managers/network_manager.hpp>
 #include <utils/utils.hpp>
@@ -20,8 +23,8 @@ ProgramChoose::ProgramChoose(QWidget *parent, AbstractScreen *previous,
             programs = RegistryManager::GetAvailablePrograms();
             const auto &[available_programs, error] = NetworkManager::GetAvailablePrograms();
             if (error) {
-                MakeError(*error);
-                return;
+                ShowMessage(*error);
+                exit(3);
             }
             for (const auto &available_program: available_programs) {
                 if (programs.count(available_program.first)) {
@@ -48,85 +51,107 @@ ProgramChoose::ProgramChoose(QWidget *parent, AbstractScreen *previous,
             if (functional_ == Functional::kDelete) {
                 programs = RegistryManager::GetAvailablePrograms();
                 if (programs.empty()) {
-                    MakeError("Unexpected state. No programs to delete. Installer will be closed!");
+                    ShowMessage("Unexpected state. No programs to delete. Installer will be closed!");
                     exit(1);
                 }
             } else if (functional_ == Functional::kInstall) {
                 const auto &[available_programs, error] = NetworkManager::GetAvailablePrograms();
                 if (error) {
-                    MakeError(*error);
-                    return;
+                    ShowMessage(*error);
+                    exit(3);
                 }
                 new_programs = available_programs;
             } else {
-                MakeError("Unexpected state. Installer will be closed!");
+                ShowMessage("Unexpected state. Installer will be closed!");
                 exit(2);
             }
             programs.merge(new_programs);
         }
-        std::transform(programs.begin(), programs.end(), std::back_inserter(programs_), [](const auto& value){
+        std::transform(programs.begin(), programs.end(), std::back_inserter(programs_), [](const auto &value) {
             return value.second;
         });
     }
-    ui_->program_name->clear();
-    ui_->program_version->clear();
-    ui_->new_program_version->clear();
-    auto tmp = ui_->program_version->count();
-    for (const auto& program : programs_) {
-        ui_->program_name->addItem(program.name);
-    }
-    for (const auto& version : programs_.begin()->versions) {
-        ui_->program_version->addItem(version);
-        tmp = ui_->program_version->count();
-    }
-    tmp = ui_->program_version->count();
+    QList<QString> inserts;
+    std::transform(programs_.begin(), programs_.end(), std::back_inserter(inserts), [](const Program &program) {
+        return program.name;
+    });
+    ui_->program_name->addItems(inserts);
+    ui_->program_version->addItems({programs_.begin()->versions.begin(), programs_.begin()->versions.end()});
     if (!new_program_versions_.empty()) {
-        for (const auto& new_version : new_program_versions_.at(programs_[0].name)) {
-            ui_->new_program_version->addItem(new_version);
-        }
-        ui_->new_program_version->setCurrentIndex(0);
+        ui_->new_program_version->addItems({new_program_versions_.at(programs_[0].name).begin(),
+                                            new_program_versions_.at(programs_[0].name).end()});
     }
-    tmp = ui_->program_version->count();
-    tmp = ui_->program_name->count();
-    qDebug() << "dsfsdf";
 }
 
 ProgramChoose::~ProgramChoose() {
     delete ui_;
 }
 
-void ProgramChoose::on_program_name_currentIndexChanged(int index) {
+void ProgramChoose::on_program_name_activated(int index) {
+    if (index == -1) { return; }
     if (index < programs_.size()) {
-        ui_->program_name->addItem(programs_[index].name);
-        for (const auto &version: programs_[index].versions) {
-            ui_->program_version->addItem(version);
-        }
+        ui_->program_version->clear();
+        ui_->program_version->addItems({programs_[index].versions.begin(), programs_[index].versions.end()});
         ui_->program_version->setCurrentIndex(0);
         if (new_program_versions_.count(programs_[index].name)) {
-            for (const auto &new_version: new_program_versions_.at(programs_[index].name)) {
-                ui_->new_program_version->addItem(new_version);
-            }
+            ui_->new_program_version->addItems({new_program_versions_.at(programs_[index].name).begin(),
+                                                new_program_versions_.at(programs_[index].name).end()});
             ui_->new_program_version->setCurrentIndex(0);
         }
     } else {
-        MakeError("Unexpected program index{name}. Installer will be closed!");
+        ShowMessage("Unexpected program index{name}. Installer will be closed!");
         exit(2);
     }
-}
-
-
-void ProgramChoose::on_program_version_currentIndexChanged(int index) {
-
-}
-
-
-void ProgramChoose::on_new_program_version_currentIndexChanged(int index) {
-
 }
 
 void ProgramChoose::UpdateButtonsState(Buttons &buttons) {
 }
 
 AbstractScreen *ProgramChoose::MakeActionAndChangeState() {
+    QString program_name, program_version;
+    switch (functional_) {
+        namespace fs = std::filesystem;
+        case Functional::kInstall: {
+            program_name = ui_->program_name->currentText();
+            program_version = ui_->program_version->currentText();
+            const auto &[zip_file, error] = NetworkManager::GetArchiveFile(program_name, program_version);
+            if (error) {
+                ShowMessage(*error);
+                exit(3);
+            }
+            if (auto dir = UnzipFileInDirGetDir(*zip_file, dir_); dir) {
+                CreateLinkToExec(*dir);
+                RegistryManager::AddProgram(std::move(program_name), std::move(program_version), std::move(*dir));
+            } else {
+                ShowMessage("Can`t install program. Try to start program from Administrator.");
+            }
+        }
+            break;
+        case Functional::kDelete:
+            program_name = ui_->program_name->currentText();
+            program_version = ui_->program_version->currentText();
+            if (const auto &path = RegistryManager::DeleteProgram(ui_->program_name->currentText(),
+                                                                  ui_->program_version->currentText()); path && fs::remove(path->toStdString())) {
+                ShowMessage("Program successfully deleted.");
+            } else {
+                ShowMessage("Can`t delete program. Try to start program from Administrator.");
+            }
+            break;
+        case Functional::kUpdate:
+            program_name = ui_->program_name->currentText();
+            program_version = ui_->new_program_version->currentText();
+            if (const auto &path = RegistryManager::UpdateProgram(ui_->program_name->currentText(),
+                                                                  ui_->program_version->currentText(),
+                                                                  ui_->new_program_version->currentText()); path) {
+                CreateLinkToExec(*path);
+            } else {
+                ShowMessage("Can`t update program. Try to start program from Administrator.");
+            }
+            break;
+        default:
+            ShowMessage("Unexpected state. Installer will be closed!");
+            exit(2);
+    }
+
     return new Finish(parent_, this);
 }

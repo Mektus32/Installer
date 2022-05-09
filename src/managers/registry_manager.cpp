@@ -9,20 +9,20 @@ const std::unordered_map<QString, Program> &RegistryManager::GetAvailableProgram
     return available_programs_;
 }
 
-void RegistryManager::AddProgram(std::string &&program_name,
-                                 std::string &&program_version,
-                                 std::string &&program_path) {
+void RegistryManager::AddProgram(QString &&program_name,
+                                 QString &&program_version,
+                                 QString &&program_path) {
 
 }
 
-void RegistryManager::UpdateProgram(const std::string &program_name,
-                                    const std::string &program_version,
-                                    std::string &&new_program_version) {
+std::optional<QString> RegistryManager::UpdateProgram(const QString &program_name,
+                                    const QString &program_version,
+                                    QString &&new_program_version) {
 
 }
 
-void RegistryManager::DeleteProgram(const std::string &program_name,
-                                    const std::string &program_version) {
+std::optional<QString> RegistryManager::DeleteProgram(const QString &program_name,
+                                    const QString &program_version) {
 
 }
 

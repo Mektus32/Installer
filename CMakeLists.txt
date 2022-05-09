@@ -21,6 +21,7 @@ set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 
 include_directories(${UI_DIR})
 include_directories(${SRC_DIR})
+include_directories(${Qt${QT_VERSION_MAJOR}Gui_PRIVATE_INCLUDE_DIRS} )
 
 file(GLOB_RECURSE SOURCES
         "${UI_DIR}/*.ui"

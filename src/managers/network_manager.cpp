@@ -37,12 +37,17 @@ namespace {
 std::tuple<std::unordered_map<QString, Program>, std::optional<QString>> NetworkManager::GetAvailablePrograms() {
     if (std::chrono::system_clock::now() - last_update_ > cache_time) {
         auto *reply = manager_.get(QNetworkRequest{QUrl{"http://192.168.1.139:5000/v1/applications-info"}});
+        auto start_request = std::chrono::system_clock::now();
         while (!reply->isFinished()) {
             qApp->processEvents();
+            if (std::chrono::system_clock::now() - start_request > std::chrono::seconds{5}) {
+                qDebug() << reply->errorString();
+                return {{}, "Can`t connect to server. Try again later. Installer will be closed!"};
+            }
         }
         if (reply->error()) {
             qDebug() << reply->errorString();
-            return {{}, "Something wrong with network. Try again later."};
+            return {{}, "Something wrong with network. Try again later. Installer will be closed!"};
         }
         programs_ = ParseJsonToPrograms(reply->readAll());
         reply->close();
@@ -52,20 +57,25 @@ std::tuple<std::unordered_map<QString, Program>, std::optional<QString>> Network
     return {programs_, std::nullopt};
 }
 
-std::tuple<std::optional<QString>, std::optional<QString>> NetworkManager::GetArchiveFile(const std::string &program_name, const std::string &version) {
+std::tuple<std::optional<QString>, std::optional<QString>> NetworkManager::GetArchiveFile(const QString &program_name, const QString &version) {
     auto url = QString("http://192.168.1.139:5000/v1/application?name=%1&version=%2").arg(
-            program_name.c_str()).arg(version.c_str());
+            program_name).arg(version);
     auto reply = manager_.get(QNetworkRequest{QUrl{url}});
+    auto start_request = std::chrono::system_clock::now();
     while (!reply->isFinished()) {
         qApp->processEvents();
+        if (std::chrono::system_clock::now() - start_request > std::chrono::seconds{5}) {
+            qDebug() << reply->errorString();
+            return {{}, "Can`t connect to server. Try again later. Installer will be closed!"};
+        }
     }
     if (reply->error()) {
         qDebug() << reply->errorString();
-        return {std::nullopt, "Something wrong with network. Try again later."};
+        return {std::nullopt, "Something wrong with network. Try again later. Installer will be closed!"};
     }
 
     const auto &file_path = QDir(std::filesystem::temp_directory_path().c_str()).filePath(
-            QString(program_name.c_str()) + '_' + version.c_str()) + ".zip";
+            QString(program_name) + '_' + version) + ".zip";
     QFile file{file_path};
     if (file.open(QIODeviceBase::OpenModeFlag::WriteOnly)) {
         file.write(reply->readAll());

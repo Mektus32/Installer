@@ -9,7 +9,10 @@
 class NetworkManager {
 public:
     static std::tuple<std::unordered_map<QString, Program>, std::optional<QString>> GetAvailablePrograms();
-    static std::tuple<std::optional<QString>, std::optional<QString>> GetArchiveFile(const std::string& program_name, const std::string& version);
+
+    static std::tuple<std::optional<QString>, std::optional<QString>>
+    GetArchiveFile(const QString &program_name, const QString &version);
+
 private:
     static QNetworkAccessManager manager_;
     static std::chrono::system_clock::time_point last_update_;

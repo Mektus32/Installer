@@ -17,11 +17,7 @@ public:
     AbstractScreen* MakeActionAndChangeState() override;
 
 private slots:
-    void on_program_name_currentIndexChanged(int index);
-
-    void on_program_version_currentIndexChanged(int index);
-
-    void on_new_program_version_currentIndexChanged(int index);
+    void on_program_name_activated(int index);
 
 private:
     Ui::program_choose *ui_;
