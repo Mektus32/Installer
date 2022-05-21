@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>597</width>
-    <height>406</height>
+    <width>402</width>
+    <height>369</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,9 +21,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>340</y>
-      <width>591</width>
-      <height>20</height>
+      <y>310</y>
+      <width>401</width>
+      <height>10</height>
      </rect>
     </property>
     <property name="orientation">
@@ -33,8 +33,8 @@
    <widget class="QPushButton" name="next_button">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>360</y>
+      <x>220</x>
+      <y>330</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -48,8 +48,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>591</width>
-      <height>351</height>
+      <width>400</width>
+      <height>300</height>
      </rect>
     </property>
    </widget>
@@ -59,8 +59,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>360</y>
+      <x>130</x>
+      <y>330</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -72,8 +72,8 @@
    <widget class="QPushButton" name="cancel_button">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>360</y>
+      <x>310</x>
+      <y>330</y>
       <width>80</width>
       <height>24</height>
      </rect>

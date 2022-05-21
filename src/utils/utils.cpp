@@ -78,6 +78,10 @@ void CreateLinkToExec(const QString &dir, const QString& name) {
     const std::regex base_regex((name.split('_')[0] + ".exe").toStdString());
     for (const auto &entry: fs::recursive_directory_iterator(dir.toStdString())) {
         if (std::regex_search(entry.path().string(), base_regex)) {
+            const auto desktop_file_name = GetDesktopFileName(name.toStdString());
+            if (fs::exists(desktop_file_name)) {
+                fs::remove(desktop_file_name);
+            }
             fs::create_symlink(entry.path().string(), GetDesktopFileName(name.toStdString()));
             break;
         }

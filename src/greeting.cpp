@@ -12,7 +12,6 @@ Greeting::Greeting(QWidget *parent) :
         ui_(new Ui::greeting)
 {
     ui_->setupUi(this);
-    ui_->info_text->setText("something");
 }
 
 Greeting::~Greeting()

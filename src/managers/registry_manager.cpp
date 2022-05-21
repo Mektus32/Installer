@@ -5,7 +5,7 @@
 std::unordered_map<QString, Program> RegistryManager::available_programs_ = {};
 
 const std::unordered_map<QString, Program> &RegistryManager::GetAvailablePrograms() {
-//    available_programs_.emplace(Program{"some_name", "some_version", "some_path"});
+    available_programs_["programName"] = Program{"programName", {"v1"}};
     return available_programs_;
 }
 

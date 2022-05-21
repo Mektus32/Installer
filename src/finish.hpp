@@ -11,7 +11,7 @@ class Finish : public AbstractScreen
     Q_OBJECT
 
 public:
-    explicit Finish(QWidget *parent, AbstractScreen* previous);
+    explicit Finish(QWidget *parent, AbstractScreen* previous, const QString& result_message);
     ~Finish();
     void UpdateButtonsState(Buttons& buttons) override;
     AbstractScreen* MakeActionAndChangeState() override;

@@ -30,7 +30,7 @@ void ChoosePath::UpdateButtonsState(Buttons &buttons) {
 
 AbstractScreen *ChoosePath::MakeActionAndChangeState() {
     QDir dir{dir_};
-    if (dir.exists()) {
+    if (!dir_.isEmpty() && dir.exists()) {
         return new ProgramChoose(parent_, this, Functional::kInstall, dir_);
     } else {
         ShowMessage("This directory does not exist. Try another.");

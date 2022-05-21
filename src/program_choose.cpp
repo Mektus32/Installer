@@ -106,6 +106,7 @@ void ProgramChoose::UpdateButtonsState(Buttons &buttons) {
 
 AbstractScreen *ProgramChoose::MakeActionAndChangeState() {
     QString program_name, program_version;
+    QString finish_message;
     switch (functional_) {
         namespace fs = std::filesystem;
         case Functional::kInstall: {
@@ -114,13 +115,15 @@ AbstractScreen *ProgramChoose::MakeActionAndChangeState() {
             const auto &[zip_file, error] = NetworkManager::GetArchiveFile(program_name, program_version);
             if (error) {
                 ShowMessage(*error);
-                return this;
+                exit(3);
             }
             if (auto dir = UnzipFileInDirGetDir(*zip_file, dir_); dir) {
                 CreateLinkToExec(*dir, program_name + '_' + program_version);
                 RegistryManager::AddProgram(std::move(program_name), std::move(program_version), std::move(*dir));
+                finish_message = "Ваша программа установлена!";
             } else {
                 ShowMessage("Can`t install program. Try to start program from Administrator.");
+                finish_message = "Не получилось установить программу.";
             }
         } break;
         case Functional::kDelete:
@@ -130,9 +133,10 @@ AbstractScreen *ProgramChoose::MakeActionAndChangeState() {
                                                                   ui_->program_version->currentText()); path
                                                                   && fs::remove(path->toStdString())) {
                 DeleteLinkToExec(program_name, program_version);
-                ShowMessage("Program successfully deleted.");
+                finish_message = "Выбранная программа была удалена.";
             } else {
                 ShowMessage("Can`t delete program. Try to start program from Administrator.");
+                finish_message = "Не получилось удалить программу.";
             }
             break;
         case Functional::kUpdate: {
@@ -142,13 +146,14 @@ AbstractScreen *ProgramChoose::MakeActionAndChangeState() {
                                               ui_->new_program_version->currentText());
             if (error) {
                 ShowMessage(*error);
-                return this;
+                exit(3);
             }
+            finish_message = "Программа была обновлена!";
         } break;
         default:
             ShowMessage("Unexpected state. Installer will be closed!");
             exit(2);
     }
 
-    return new Finish(parent_, this);
+    return new Finish(parent_, this, finish_message);
 }

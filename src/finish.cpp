@@ -1,11 +1,12 @@
 #include "finish.hpp"
 #include "ui_finish.h"
 
-Finish::Finish(QWidget *parent, AbstractScreen* previous) :
+Finish::Finish(QWidget *parent, AbstractScreen* previous, const QString& result_message) :
     AbstractScreen(parent, previous),
     ui(new Ui::finish)
 {
     ui->setupUi(this);
+    ui->info->setText(result_message);
 }
 
 Finish::~Finish()
