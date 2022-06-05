@@ -2,7 +2,7 @@
 
 ---
 
-## What it is?
+## What is it?
 
 It is installer with programs versions.
 It has two programs: **server** and **client**.
