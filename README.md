@@ -27,4 +27,4 @@ It has two programs: **server** and **client**.
 ### To Do:
 1. Fix build for windows
 2. Update UI
-3. To remove installer with programs data
+3. Delete installer with programs data
