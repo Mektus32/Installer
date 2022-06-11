@@ -19,4 +19,5 @@ public:
                                                  const QString& program_version);
 private:
     static std::unordered_map<QString, Program> available_programs_;
+    static QString register_path_;
 };

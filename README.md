@@ -23,8 +23,3 @@ It has two programs: **server** and **client**.
 8. #### Start python server!
 9. #### Build and start client!
 10. Now you have **installer** and **server** with your programs.
----
-### To Do:
-1. Fix build for windows
-2. Update UI
-3. Delete installer with programs data

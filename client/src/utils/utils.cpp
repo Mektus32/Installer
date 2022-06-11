@@ -82,7 +82,7 @@ void CreateLinkToExec(const QString &dir, const QString& name) {
             if (fs::exists(desktop_file_name)) {
                 fs::remove(desktop_file_name);
             }
-            fs::create_symlink(entry.path().string(), GetDesktopFileName(name.toStdString()));
+            fs::create_symlink(entry.path().string(), desktop_file_name);
             break;
         }
     }
